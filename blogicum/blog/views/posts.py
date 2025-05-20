@@ -69,12 +69,15 @@ class PostDetailView(PostMixin, DetailView):
             self.model.objects.filter(pk=self.kwargs['post_id'])
         )
 
-        if post.author == self.request.user:
+        user = self.request.user
+        if user.is_authenticated and post.author == user:
             return post
 
-        is_denied = (not post.is_published
-                     or post.pub_date > timezone.now()
-                     or not post.category.is_published)
+        is_denied = (
+            not post.is_published
+            or post.pub_date > timezone.now()
+            or (post.category and not post.category.is_published)
+        )
         if is_denied:
             raise Http404
 

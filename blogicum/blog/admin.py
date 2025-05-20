@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
 from .models import Post, Category, Location, Comment
 
@@ -67,5 +69,5 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('post', 'author', 'text')
     list_display_links = ('post',)
 
-
+admin.site.register(User, UserAdmin)
 admin.site.empty_value_display = 'Не задано'
